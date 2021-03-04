@@ -28,18 +28,20 @@
             <EditText
                 android:id="@+id/email_signup"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/edit_text_bgcolor"
                 android:hint="   Email:"
                 android:shadowColor="#03A9F4" />
+
             <EditText
                 android:id="@+id/password_signup"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_margin="10dp"
+                android:background="@drawable/edit_text_bgcolor"
                 android:hint="   Password:"
-                android:background="@drawable/edit_text_bgcolor"/>
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/btn_signup"
