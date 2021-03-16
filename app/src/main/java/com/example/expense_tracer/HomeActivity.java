@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -26,6 +27,7 @@ private FrameLayout frameLayout;
 private DashboardFragment dashboardFragment;
 private IncomeFragment incomeFragment;
 private ExpenseFragment expenseFragment;
+public SQLiteDatabase sqLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +35,10 @@ private ExpenseFragment expenseFragment;
         setContentView(R.layout.activity_home);
         Toolbar toolbar=findViewById(R.id.my_toolbar);
         toolbar.setTitle("Expense Tracer");
+        openDataBase();
 
-      //  setSupportActionBar(toolbar);
+
+        //  setSupportActionBar(toolbar);
 
         DrawerLayout drawerLayout=findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open
@@ -46,7 +50,7 @@ private ExpenseFragment expenseFragment;
         navigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView=findViewById(R.id.bottomNavBar);
         frameLayout=findViewById(R.id.main_frame);
-        dashboardFragment=new DashboardFragment();
+        dashboardFragment=new DashboardFragment(sqLiteDatabase);
         incomeFragment=new IncomeFragment();
         expenseFragment=new ExpenseFragment();
         setFragment(dashboardFragment);
@@ -74,9 +78,24 @@ private ExpenseFragment expenseFragment;
                }
            }
 
-
        });
 
+
+       //createTables();
+
+    }
+
+    private void openDataBase() {
+        sqLiteDatabase = openOrCreateDatabase("ExpenseTacer.db", MODE_PRIVATE, null);
+    }
+
+    private void createTables() {
+        String incomeTable = "CREATE TABLE INCOME" +
+                " ( income_id INTEGER PRIMARY KEY, " +
+                " type TEXT NOT NULL, " +
+                "amount INTEGER NOT NULL," +
+                " note TEXT NOT NULL);";
+        sqLiteDatabase.execSQL(incomeTable);
     }
 
     private void setFragment(Fragment fragment) {
@@ -100,7 +119,7 @@ private ExpenseFragment expenseFragment;
         Fragment fragment=null;
         switch ((itemId)){
             case R.id.dashboard:
-                fragment=new DashboardFragment();
+                fragment=new DashboardFragment(sqLiteDatabase);
                 break;
             case R.id.income:
                 fragment=new IncomeFragment();
@@ -125,4 +144,6 @@ private ExpenseFragment expenseFragment;
         displaySelectedListener(item.getItemId());
         return true;
     }
+
+
 }
