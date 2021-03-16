@@ -1,10 +1,12 @@
 package com.example.expense_tracer;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -167,10 +171,14 @@ public class DashboardFragment extends Fragment {
         fab_expense_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                expenseDataInsert();
 
             }
+
+
         });
     }
+
 
     public void incomeDataInsert(){
         AlertDialog.Builder myDialog=new AlertDialog.Builder(getActivity());
@@ -178,10 +186,37 @@ public class DashboardFragment extends Fragment {
         View myview=inflater.inflate(R.layout.custom_layout_for_insertdata,null);
         myDialog.setView(myview);
         AlertDialog dialog=myDialog.create();
+        TextView txtTitle=myview.findViewById(R.id.incOrExpTitle);
+        txtTitle.setText("INCOME DETAILS");
 
         EditText editAmount=myview.findViewById(R.id.amount_edit);
         EditText editType=myview.findViewById(R.id.type_edit);
         EditText editNote=myview.findViewById(R.id.note_edit);
+        EditText dateText=myview.findViewById(R.id.date_edit);
+
+        dateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(myDialog.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                dateText.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
 
         Button btnSave=myview.findViewById(R.id.btnSave);
         Button btnCancel=myview.findViewById(R.id.btnCancel);
@@ -192,6 +227,7 @@ public class DashboardFragment extends Fragment {
                 String type=editType.getText().toString().trim();
                 String amount=editAmount.getText().toString().trim();
                 String note=editNote.getText().toString().trim();
+                String date=dateText.getText().toString().trim();
 
                 if (TextUtils.isEmpty(type)){
                     editType.setError("Required Field..");
@@ -208,19 +244,101 @@ public class DashboardFragment extends Fragment {
                     return;
                 }
 
-//                String id=mIncomeDatabase.push().getKey();
-//                String mDate= DateFormat.getDateInstance().format(new Date());
-
-//                Data data=new Data(ourAmountInt,type,note,id,mDate);
-//                mIncomeDatabase.child(id).setValue(data);
-//                Toast.makeText(getActivity(),"Data Added",Toast.LENGTH_SHORT).show();
-
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("type", type);
-                contentValues.put("amount", amount);
-                contentValues.put("note", note);
+                contentValues.put("income_type", type);
+                contentValues.put("income_amount", amount);
+                contentValues.put("income_note", note);
+                contentValues.put("income_date",date);
 
                 sqLiteDatabase.insert("INCOME", null, contentValues);
+
+                dialog.dismiss();
+
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+
+        });
+        dialog.show();
+    }
+
+    private void expenseDataInsert() {
+        AlertDialog.Builder myDialog=new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater=LayoutInflater.from(getActivity());
+        View myview=inflater.inflate(R.layout.custom_layout_for_insertdata,null);
+        myDialog.setView(myview);
+        AlertDialog dialog=myDialog.create();
+
+        TextView txtTitle=myview.findViewById(R.id.incOrExpTitle);
+        txtTitle.setText("EXPENSE DETAILS");
+
+        EditText editAmount=myview.findViewById(R.id.amount_edit);
+        EditText editType=myview.findViewById(R.id.type_edit);
+        EditText editNote=myview.findViewById(R.id.note_edit);
+        EditText dateText=myview.findViewById(R.id.date_edit);
+
+        dateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(myDialog.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                dateText.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
+        Button btnSave=myview.findViewById(R.id.btnSave);
+        Button btnCancel=myview.findViewById(R.id.btnCancel);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String type=editType.getText().toString().trim();
+                String amount=editAmount.getText().toString().trim();
+                String note=editNote.getText().toString().trim();
+                String date=dateText.getText().toString().trim();
+
+                if (TextUtils.isEmpty(type)){
+                    editType.setError("Required Field..");
+                    return;
+                }
+                if (TextUtils.isEmpty(amount)){
+                    editAmount.setError("Required Field..");
+                    return;
+                }
+
+                double ourAmountInt=Double.parseDouble(amount);
+                if (TextUtils.isEmpty(note)){
+                    editNote.setError("Required Field..");
+                    return;
+                }
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("expense_type", type);
+                contentValues.put("expense_amount", amount);
+                contentValues.put("expense_note", note);
+                contentValues.put("expense_date",date);
+
+                sqLiteDatabase.insert("EXPENSE", null, contentValues);
 
                 dialog.dismiss();
 

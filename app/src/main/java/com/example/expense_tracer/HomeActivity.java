@@ -81,7 +81,7 @@ public SQLiteDatabase sqLiteDatabase;
        });
 
 
-       //createTables();
+       createTables();
 
     }
 
@@ -90,12 +90,20 @@ public SQLiteDatabase sqLiteDatabase;
     }
 
     private void createTables() {
-        String incomeTable = "CREATE TABLE INCOME" +
+        String incomeTable = "CREATE TABLE IF NOT EXISTS INCOME" +
                 " ( income_id INTEGER PRIMARY KEY, " +
-                " type TEXT NOT NULL, " +
-                "amount INTEGER NOT NULL," +
-                " note TEXT NOT NULL);";
+                " income_type TEXT NOT NULL, " +
+                "income_amount INTEGER NOT NULL," +
+                "income_note TEXT NOT NULL," +
+                "income_date TEXT NOT NULL);";
+        String expenseTable = "CREATE TABLE IF NOT EXISTS EXPENSE" +
+                " ( expense_id INTEGER PRIMARY KEY, " +
+                " expense_type TEXT NOT NULL, " +
+                "expense_amount INTEGER NOT NULL," +
+                " expense_note TEXT NOT NULL," +
+                "expense_date TEXT NOT NULL);";
         sqLiteDatabase.execSQL(incomeTable);
+        sqLiteDatabase.execSQL(expenseTable);
     }
 
     private void setFragment(Fragment fragment) {
