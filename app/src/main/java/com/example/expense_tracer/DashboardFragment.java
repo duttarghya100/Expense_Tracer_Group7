@@ -186,6 +186,7 @@ public class DashboardFragment extends Fragment {
         View myview=inflater.inflate(R.layout.custom_layout_for_insertdata,null);
         myDialog.setView(myview);
         AlertDialog dialog=myDialog.create();
+        dialog.setCancelable(false);
         TextView txtTitle=myview.findViewById(R.id.incOrExpTitle);
         txtTitle.setText("INCOME DETAILS");
 
@@ -229,18 +230,24 @@ public class DashboardFragment extends Fragment {
                 String note=editNote.getText().toString().trim();
                 String date=dateText.getText().toString().trim();
 
-                if (TextUtils.isEmpty(type)){
-                    editType.setError("Required Field..");
-                    return;
-                }
                 if (TextUtils.isEmpty(amount)){
                     editAmount.setError("Required Field..");
                     return;
                 }
 
+                if (TextUtils.isEmpty(type)){
+                    editType.setError("Required Field..");
+                    return;
+                }
+
+
                 double ourAmountInt=Double.parseDouble(amount);
                 if (TextUtils.isEmpty(note)){
                     editNote.setError("Required Field..");
+                    return;
+                }
+                if (TextUtils.isEmpty(date)){
+                    dateText.setError("Required Field..");
                     return;
                 }
 
@@ -251,6 +258,7 @@ public class DashboardFragment extends Fragment {
                 contentValues.put("income_date",date);
 
                 sqLiteDatabase.insert("INCOME", null, contentValues);
+                Toast.makeText(getActivity(),"Data Added",Toast.LENGTH_SHORT).show();
 
                 dialog.dismiss();
 
@@ -273,6 +281,7 @@ public class DashboardFragment extends Fragment {
         View myview=inflater.inflate(R.layout.custom_layout_for_insertdata,null);
         myDialog.setView(myview);
         AlertDialog dialog=myDialog.create();
+        dialog.setCancelable(false);
 
         TextView txtTitle=myview.findViewById(R.id.incOrExpTitle);
         txtTitle.setText("EXPENSE DETAILS");
@@ -317,18 +326,23 @@ public class DashboardFragment extends Fragment {
                 String note=editNote.getText().toString().trim();
                 String date=dateText.getText().toString().trim();
 
-                if (TextUtils.isEmpty(type)){
-                    editType.setError("Required Field..");
-                    return;
-                }
                 if (TextUtils.isEmpty(amount)){
                     editAmount.setError("Required Field..");
+                    return;
+                }
+                if (TextUtils.isEmpty(type)){
+                    editType.setError("Required Field..");
                     return;
                 }
 
                 double ourAmountInt=Double.parseDouble(amount);
                 if (TextUtils.isEmpty(note)){
                     editNote.setError("Required Field..");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(date)){
+                    dateText.setError("Required Field..");
                     return;
                 }
 
@@ -339,7 +353,7 @@ public class DashboardFragment extends Fragment {
                 contentValues.put("expense_date",date);
 
                 sqLiteDatabase.insert("EXPENSE", null, contentValues);
-
+                Toast.makeText(getActivity(),"Data Added",Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
 
             }
