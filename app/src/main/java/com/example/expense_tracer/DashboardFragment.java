@@ -251,7 +251,7 @@ public class DashboardFragment extends Fragment {
                     return;
                 }
 
-                ContentValues contentValues = new ContentValues();
+                ContentValues contentValues = new ContentValues(); // bundling
                 contentValues.put("income_type", type);
                 contentValues.put("income_amount", amount);
                 contentValues.put("income_note", note);

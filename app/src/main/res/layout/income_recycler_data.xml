@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="5dp"
+    app:cardElevation="5dp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.3">
+
+            <TextView
+                android:id="@+id/date_txt_income"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="19th March 2021"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/date_color"
+                android:textStyle="bold">
+
+            </TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/type_txt_income"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:paddingLeft="2dp"
+                android:text="Type"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/black"
+                android:textStyle="bold">
+
+            </TextView>
+            <!-- As relative layout doesnot support automatically vertical like Linear Layout
+             android:layout_below is used
+            -->
+            <TextView
+                android:id="@+id/note_txt_income"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/type_txt_income"
+                android:maxLines="1"
+                android:paddingLeft="2dp"
+                android:text="Note"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/black"
+                android:textStyle="bold">
+
+            </TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.4">
+
+            <TextView
+                android:id="@+id/amount_txt_income"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="60000"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/date_color"
+                android:textStyle="bold">
+
+            </TextView>
+        </RelativeLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
