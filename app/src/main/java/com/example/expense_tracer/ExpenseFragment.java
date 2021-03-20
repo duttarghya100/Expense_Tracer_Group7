@@ -1,8 +1,9 @@
 package com.example.expense_tracer;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,17 +15,12 @@ import android.widget.TextView;
 
 import com.example.expense_tracer.Model.Data;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ExpenseFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class ExpenseFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -32,8 +28,10 @@ public class ExpenseFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private FirebaseAuth mAuth;
     private RecyclerView recyclerView;
+    SQLiteDatabase sqLiteDatabase;
+    List<Data> expenseList = new ArrayList<>();
+    private FirebaseAuth mAuth;
 
     private TextView expenseSumResult;
     private DatabaseReference mExpenseDatabse;
@@ -42,27 +40,10 @@ public class ExpenseFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ExpenseFragment() {
-        // Required empty public constructor
+    public ExpenseFragment(SQLiteDatabase sqLiteDatabase) {
+        this.sqLiteDatabase = sqLiteDatabase;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ExpenseFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ExpenseFragment newInstance(String param1, String param2) {
-        ExpenseFragment fragment = new ExpenseFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,72 +58,39 @@ public class ExpenseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        getTasks();
         View myview= inflater.inflate(R.layout.fragment_expense, container, false);
-
-        mAuth=FirebaseAuth.getInstance();
-        FirebaseUser mUser=mAuth.getCurrentUser();
-        //       mIncomeDatabase = FirebaseDatabase.getInstance().getReference().child("ExpenseData").child(uId);
-
-        expenseSumResult=myview.findViewById(R.id.expense_txt_result);
-
+        recyclerView=myview.findViewById(R.id.recycler_id_expense);
+        RecyclerViewAdapter expenseRecyclerViewAdapter=new RecyclerViewAdapter(expenseList,getActivity(),sqLiteDatabase);
+        expenseRecyclerViewAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(expenseRecyclerViewAdapter);
         LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
+        expenseSumResult=myview.findViewById(R.id.expense_txt_result);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
 
-        mExpenseDatabse.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int totalvalue=0;
-                for(DataSnapshot mysnapshot:dataSnapshot.getChildren()){
-                    Data data=mysnapshot.getValue(Data.class);
-                    totalvalue+=data.getAmount();
-                    String stTotalValue=String.valueOf(totalvalue);
-                    expenseSumResult.setText(stTotalValue);
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
         return myview;
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        View mView;
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mView=itemView;
-        }
-        private  void setType(String type){
+    public void getTasks() {
+        String expenseDetails = "SELECT * FROM EXPENSE;";
+        Cursor cursor = sqLiteDatabase.rawQuery(expenseDetails, null);
+        expenseList.clear();
+        if(cursor != null) {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()) {
+                String ExpenseID = cursor.getString(cursor.getColumnIndex("expense_id"));
+                String ExpenseType = cursor.getString(cursor.getColumnIndex("expense_type"));
+                double ExpenseAmount = Double.parseDouble(cursor.getString(cursor.getColumnIndex("expense_amount")));
+                String ExpenseNote = cursor.getString(cursor.getColumnIndex("expense_note"));
+                String ExpenseDate = cursor.getString(cursor.getColumnIndex("expense_date"));
 
-            TextView mType= mView.findViewById(R.id.type_txt_expense);
-            mType.setText(type);
+                Data expense = new Data(ExpenseID,ExpenseType,ExpenseAmount,ExpenseNote,ExpenseDate);
+                expenseList.add(expense);
+                cursor.moveToNext();
+            }
         }
-        private  void setNote(String note){
-
-            TextView mNote= mView.findViewById(R.id.note_txt_expense);
-            mNote.setText(note);
-        }
-        private void    setDate(String date)
-        {
-            TextView mDate=mView.findViewById(R.id.date_txt_expense);
-            mDate.setText(date);
-        }
-        private void    setAmount(String amount)
-        {
-            TextView mAAmount=mView.findViewById(R.id.amount_txt_expense);
-            String staamount=String.valueOf(amount);
-            mAAmount.setText(staamount);
-        }
-
-
-
     }
 }

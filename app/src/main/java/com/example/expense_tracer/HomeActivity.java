@@ -9,16 +9,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.ActionBar;
-import android.app.ProgressDialog;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 private BottomNavigationView bottomNavigationView;
@@ -51,8 +49,8 @@ public SQLiteDatabase sqLiteDatabase;
         bottomNavigationView=findViewById(R.id.bottomNavBar);
         frameLayout=findViewById(R.id.main_frame);
         dashboardFragment=new DashboardFragment(sqLiteDatabase);
-        incomeFragment=new IncomeFragment();
-        expenseFragment=new ExpenseFragment();
+        incomeFragment=new IncomeFragment(sqLiteDatabase);
+        expenseFragment=new ExpenseFragment(sqLiteDatabase);
         setFragment(dashboardFragment);
 
        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -86,9 +84,13 @@ public SQLiteDatabase sqLiteDatabase;
     }
 
     private void openDataBase() {
-        sqLiteDatabase = openOrCreateDatabase("ExpenseTacer.db", MODE_PRIVATE, null);
-    }
+        try {
+            sqLiteDatabase = openOrCreateDatabase("ExpenseTacer.db", MODE_PRIVATE, null);
+        }catch (Exception ex){
+            Log.d("Expense Tracer", ex.getMessage());
+        }
 
+    }
     private void createTables() {
         String incomeTable = "CREATE TABLE IF NOT EXISTS INCOME" +
                 " ( income_id INTEGER PRIMARY KEY, " +
@@ -130,10 +132,10 @@ public SQLiteDatabase sqLiteDatabase;
                 fragment=new DashboardFragment(sqLiteDatabase);
                 break;
             case R.id.income:
-                fragment=new IncomeFragment();
+                fragment=new IncomeFragment(sqLiteDatabase);
                 break;
             case R.id.expense:
-                fragment=new ExpenseFragment();
+                fragment=new ExpenseFragment(sqLiteDatabase);
                 break;
         }
 
