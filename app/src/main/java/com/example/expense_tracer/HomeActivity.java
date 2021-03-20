@@ -22,9 +22,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 private BottomNavigationView bottomNavigationView;
 private FrameLayout frameLayout;
 
+//Fragments
 private DashboardFragment dashboardFragment;
 private IncomeFragment incomeFragment;
 private ExpenseFragment expenseFragment;
+private ReportOptionsFragment optionsFragment;
+
+//DB
 public SQLiteDatabase sqLiteDatabase;
 
     @Override
@@ -51,6 +55,7 @@ public SQLiteDatabase sqLiteDatabase;
         dashboardFragment=new DashboardFragment(sqLiteDatabase);
         incomeFragment=new IncomeFragment(sqLiteDatabase);
         expenseFragment=new ExpenseFragment(sqLiteDatabase);
+        optionsFragment = new ReportOptionsFragment(sqLiteDatabase);
         setFragment(dashboardFragment);
 
        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -71,9 +76,11 @@ public SQLiteDatabase sqLiteDatabase;
                        bottomNavigationView.setItemBackgroundResource(R.color.expense_color);
                        return true;
 
+
                    default:
                        return false;
                }
+
            }
 
        });
@@ -137,6 +144,10 @@ public SQLiteDatabase sqLiteDatabase;
             case R.id.expense:
                 fragment=new ExpenseFragment(sqLiteDatabase);
                 break;
+            case R.id.report:
+                fragment=new ReportOptionsFragment(sqLiteDatabase);
+                break;
+
         }
 
         if ((fragment!=null)){

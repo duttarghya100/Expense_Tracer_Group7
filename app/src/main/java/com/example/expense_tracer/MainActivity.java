@@ -1,6 +1,7 @@
 package com.example.expense_tracer;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -33,6 +34,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Displaying Iccon in Action Bar
+        //Arghya
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setLogo(R.mipmap.ic_launcher1_round);
+
+
         mAuth=FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser()!=null){
             startActivity(new Intent(getApplicationContext(),HomeActivity.class));

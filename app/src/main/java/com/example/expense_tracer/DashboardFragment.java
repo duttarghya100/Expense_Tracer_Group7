@@ -44,8 +44,10 @@ public class DashboardFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private FloatingActionButton fab_main_btn;
+    private TextView expense_set_result;
     private FloatingActionButton fab_income_btn;
     private FloatingActionButton fab_expense_btn;
+    private TextView income_set_result;
     private SQLiteDatabase sqLiteDatabase;
 
     private TextView fab_income_txt;
@@ -115,14 +117,20 @@ public class DashboardFragment extends Fragment {
 //        mIncomeDatabase = FirebaseDatabase.getInstance().getReference().child("IncomeData").child(uId);
 //        mExpenseDatabase= FirebaseDatabase.getInstance().getReference().child("ExpenseData").child(uId);
 
-
+//connecting floating button to layout
         fab_main_btn=myview.findViewById(R.id.fb_main_plus_btn);
         fab_income_btn=myview.findViewById(R.id.income_ft_btn);
         fab_expense_btn=myview.findViewById(R.id.expense_ft_btn);
         fab_income_txt=myview.findViewById(R.id.income_ft_text);
         fab_expense_txt=myview.findViewById(R.id.expense_ft_text);
+
+        //Animation..
         FadeOpen= AnimationUtils.loadAnimation(getActivity(),R.anim.fade_open);
         FadeClose= AnimationUtils.loadAnimation(getActivity(),R.anim.fade_close);
+
+
+       income_set_result = myview.findViewById(R.id.income_set_result);
+       expense_set_result = myview.findViewById(R.id.expense_set_result);
 
         fab_main_btn.setOnClickListener(new View.OnClickListener() {
 
