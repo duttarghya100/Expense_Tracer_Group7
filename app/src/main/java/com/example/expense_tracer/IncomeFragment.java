@@ -1,5 +1,6 @@
 package com.example.expense_tracer;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.expense_tracer.Model.Data;
@@ -37,6 +40,21 @@ public class IncomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private TextView incomeTotalSum;
     private FirebaseAuth mAuth;
+
+    //Update edit Text.
+    private EditText edtAmount;
+    private EditText edtType;
+    private EditText edtNote;
+
+    //button for Update and Delete
+    private Button btnUpdate;
+    private Button btnDelete;
+
+    //Data item value
+    private String type;
+    private String note;
+    private String amount;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -111,10 +129,12 @@ public class IncomeFragment extends Fragment {
 
         return myview;
     }
-
+// populate the data here
     public void onStart() {
 
         super.onStart();
+        //
+        // after populating, we need to call onclick listener on the view and inside that --- updateDataItem()
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -146,6 +166,34 @@ public class IncomeFragment extends Fragment {
         }
 
 
+
+    }
+
+    private void updateDataItem(){
+        AlertDialog.Builder mydialog= new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater= LayoutInflater.from(getActivity());
+        View myView=inflater.inflate(R.layout.update_data_item,null);
+
+        edtAmount=myView.findViewById(R.id.amount_edit);
+        edtType=myView.findViewById(R.id.type_edit);
+        edtNote=myView.findViewById(R.id.note_edit);
+
+        btnUpdate=myView.findViewById(R.id.btn_upd_Update);
+        btnDelete=myView.findViewById(R.id.btnuPD_Delete);
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
     }
 
