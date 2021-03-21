@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 private BottomNavigationView bottomNavigationView;
@@ -27,6 +29,7 @@ private DashboardFragment dashboardFragment;
 private IncomeFragment incomeFragment;
 private ExpenseFragment expenseFragment;
 private ReportOptionsFragment optionsFragment;
+private FirebaseAuth mAuth;
 
 //DB
 public SQLiteDatabase sqLiteDatabase;
@@ -39,7 +42,7 @@ public SQLiteDatabase sqLiteDatabase;
         toolbar.setTitle("Expense Tracer");
         openDataBase();
 
-
+        mAuth=FirebaseAuth.getInstance();
         //  setSupportActionBar(toolbar);
 
         DrawerLayout drawerLayout=findViewById(R.id.drawer_layout);
@@ -146,6 +149,11 @@ public SQLiteDatabase sqLiteDatabase;
                 break;
             case R.id.report:
                 fragment=new ReportOptionsFragment(sqLiteDatabase);
+                break;
+
+            case R.id.logout:
+                mAuth.signOut();
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
                 break;
 
         }

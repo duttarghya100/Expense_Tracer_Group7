@@ -16,4 +16,9 @@
         android:id="@+id/report"
         android:icon="@drawable/summary"
         android:title="Summary" />
+
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/logout"
+        android:title="Log Out " />
 </menu>
