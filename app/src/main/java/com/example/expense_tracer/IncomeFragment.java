@@ -79,13 +79,33 @@ public class IncomeFragment extends Fragment {
 
 
         return myview;
+
+
+
     }
+
+
 // populate the data here
     public void onStart() {
 
 
 
         super.onStart();
+        // showing the Income total
+
+        double income=0;
+
+        String incomeTotal="SELECT SUM(income_amount) FROM Income;";
+
+        final Cursor cursorI = sqLiteDatabase.rawQuery(incomeTotal, null);
+
+        if(cursorI.moveToFirst())
+            income = cursorI.getDouble(0);
+        else
+            income=-1;
+        cursorI.close();
+        incomeTotalSum.setText(String.valueOf(income));
+
         //
         // after populating, we need to call onclick listener on the view and inside that --- updateDataItem()
     }
@@ -108,6 +128,7 @@ public class IncomeFragment extends Fragment {
                 cursor.moveToNext();
             }
         }
+
     }
 
 
@@ -126,6 +147,7 @@ public class IncomeFragment extends Fragment {
 
         btnUpdate=myView.findViewById(R.id.btn_upd_Update);
         btnDelete=myView.findViewById(R.id.btnuPD_Delete);
+        AlertDialog dialog=mydialog.create();
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,10 +159,10 @@ public class IncomeFragment extends Fragment {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                dialog.dismiss();
             }
         });
-
+            dialog.show();
     }
 
 }

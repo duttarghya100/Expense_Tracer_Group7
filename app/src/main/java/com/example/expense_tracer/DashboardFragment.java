@@ -3,6 +3,7 @@ package com.example.expense_tracer;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
@@ -49,6 +50,7 @@ public class DashboardFragment extends Fragment {
     private FloatingActionButton fab_expense_btn;
     private TextView income_set_result;
     private SQLiteDatabase sqLiteDatabase;
+
 
     private TextView fab_income_txt;
     private TextView fab_expense_txt;
@@ -163,6 +165,37 @@ public class DashboardFragment extends Fragment {
 
             }
         });
+        // showing the Income total Arghya
+
+        double income=0;
+
+        String incomeTotal="SELECT SUM(income_amount) FROM Income;";
+
+        final Cursor cursorI = sqLiteDatabase.rawQuery(incomeTotal, null);
+
+        if(cursorI.moveToFirst())
+         income = cursorI.getDouble(0);
+        else
+            income=-1;
+        cursorI.close();
+        income_set_result.setText(String.valueOf(income));
+
+
+        // showing the Expense total
+        double expense=0;
+        String expenseTotal="SELECT SUM(expense_amount) FROM Expense;";
+
+        final Cursor cursorE = sqLiteDatabase.rawQuery(expenseTotal, null);
+
+        if(cursorE.moveToFirst())
+            expense = cursorE.getDouble(0);
+        else
+            expense=-1;
+        cursorE.close();
+        expense_set_result.setText(String.valueOf(expense));
+
+
+
         return myview;
     }
 
@@ -234,11 +267,12 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String type=editType.getText().toString().trim();
-                String amount=editAmount.getText().toString().trim();
+                String stramount=editAmount.getText().toString().trim();
+               double amount=Double.parseDouble(stramount);
                 String note=editNote.getText().toString().trim();
                 String date=dateText.getText().toString().trim();
 
-                if (TextUtils.isEmpty(amount)){
+                if (TextUtils.isEmpty(stramount)){
                     editAmount.setError("Required Field..");
                     return;
                 }
@@ -249,7 +283,7 @@ public class DashboardFragment extends Fragment {
                 }
 
 
-                double ourAmountInt=Double.parseDouble(amount);
+                //double ourAmountInt=Double.parseDouble(stramount);
                 if (TextUtils.isEmpty(note)){
                     editNote.setError("Required Field..");
                     return;
@@ -330,11 +364,12 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String type=editType.getText().toString().trim();
-                String amount=editAmount.getText().toString().trim();
+                String stramount=editAmount.getText().toString().trim();
+                double amount=Double.parseDouble(stramount);
                 String note=editNote.getText().toString().trim();
                 String date=dateText.getText().toString().trim();
 
-                if (TextUtils.isEmpty(amount)){
+                if (TextUtils.isEmpty(stramount)){
                     editAmount.setError("Required Field..");
                     return;
                 }
@@ -343,7 +378,7 @@ public class DashboardFragment extends Fragment {
                     return;
                 }
 
-                double ourAmountInt=Double.parseDouble(amount);
+               // double ourAmountInt=Double.parseDouble(stramount);
                 if (TextUtils.isEmpty(note)){
                     editNote.setError("Required Field..");
                     return;

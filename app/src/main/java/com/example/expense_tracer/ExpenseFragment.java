@@ -74,6 +74,29 @@ public class ExpenseFragment extends Fragment {
         return myview;
     }
 
+    public void onStart() {
+
+
+
+        super.onStart();
+        // showing the Expense total Arghya
+        double expense=0;
+        String expenseTotal="SELECT SUM(expense_amount) FROM Expense;";
+
+        final Cursor cursorE = sqLiteDatabase.rawQuery(expenseTotal, null);
+
+        if(cursorE.moveToFirst())
+            expense = cursorE.getDouble(0);
+        else
+            expense=-1;
+        cursorE.close();
+        expenseSumResult.setText(String.valueOf(expense));
+
+
+        //
+        // after populating, we need to call onclick listener on the view and inside that --- updateDataItem()
+    }
+
     public void getTasks() {
         String expenseDetails = "SELECT * FROM EXPENSE;";
         Cursor cursor = sqLiteDatabase.rawQuery(expenseDetails, null);

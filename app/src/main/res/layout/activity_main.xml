@@ -32,15 +32,18 @@
                 android:layout_height="30dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/edit_text_bgcolor"
-                android:hint="   Email:" />
+                android:hint="   Email:"
+                android:paddingLeft="10dp" />
+
             <EditText
                 android:id="@+id/password_login"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_margin="10dp"
+                android:background="@drawable/edit_text_bgcolor"
                 android:hint="   Password:"
                 android:inputType="textPassword"
-                android:background="@drawable/edit_text_bgcolor"/>
+                android:paddingLeft="10dp" />
 
             <Button
                 android:id="@+id/btn_login"
