@@ -90,7 +90,7 @@ public class ExpenseFragment extends Fragment {
         else
             expense=-1;
         cursorE.close();
-        expenseSumResult.setText(String.valueOf(expense));
+        expenseSumResult.setText("- "+String.valueOf(expense));
 
 
         //

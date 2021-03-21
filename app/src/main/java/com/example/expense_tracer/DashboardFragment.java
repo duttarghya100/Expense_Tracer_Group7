@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -50,6 +52,9 @@ public class DashboardFragment extends Fragment {
     private FloatingActionButton fab_expense_btn;
     private TextView income_set_result;
     private SQLiteDatabase sqLiteDatabase;
+    // Recycler View
+    private RecyclerView mRecyclerIncome;
+    private RecyclerView mRecyclerExpense;
 
 
     private TextView fab_income_txt;
@@ -129,9 +134,14 @@ public class DashboardFragment extends Fragment {
         //Animation..
         FadeOpen= AnimationUtils.loadAnimation(getActivity(),R.anim.fade_open);
         FadeClose= AnimationUtils.loadAnimation(getActivity(),R.anim.fade_close);
+        //Recycler View Connect for fragments in DAshBoard
+
+        mRecyclerIncome=myview.findViewById(R.id.recycler_income);
+        mRecyclerExpense=myview.findViewById(R.id.recycler_expense);
 
 
-       income_set_result = myview.findViewById(R.id.income_set_result);
+
+        income_set_result = myview.findViewById(R.id.income_set_result);
        expense_set_result = myview.findViewById(R.id.expense_set_result);
 
         fab_main_btn.setOnClickListener(new View.OnClickListener() {
@@ -192,8 +202,21 @@ public class DashboardFragment extends Fragment {
         else
             expense=-1;
         cursorE.close();
-        expense_set_result.setText(String.valueOf(expense));
+        expense_set_result.setText("- "+String.valueOf(expense));
 
+        // Recycler view in Dashboard
+
+        LinearLayoutManager layoutManagerIncome = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+        layoutManagerIncome.setReverseLayout(true);
+        layoutManagerIncome.setStackFromEnd(true);
+        mRecyclerIncome.setHasFixedSize(true);
+        mRecyclerIncome.setLayoutManager(layoutManagerIncome);
+
+        LinearLayoutManager layoutManagerExpense = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+        layoutManagerExpense.setReverseLayout(true);
+        layoutManagerExpense.setStackFromEnd(true);
+        mRecyclerExpense.setHasFixedSize(true);
+        mRecyclerExpense.setLayoutManager(layoutManagerExpense);
 
 
         return myview;
