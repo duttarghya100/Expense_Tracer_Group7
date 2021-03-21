@@ -27,12 +27,10 @@ import java.util.List;
 
 public class IncomeFragment extends Fragment {
 
-    private DatabaseReference mIncomeDatabse;
     private RecyclerView recyclerView;
     SQLiteDatabase sqLiteDatabase;
     List<Data> incomeList = new ArrayList<>();
     private TextView incomeTotalSum;
-    private FirebaseAuth mAuth;
 
     public IncomeFragment(SQLiteDatabase sqLiteDatabase) {
         this.sqLiteDatabase = sqLiteDatabase;
@@ -52,14 +50,6 @@ public class IncomeFragment extends Fragment {
     private String amount;
 
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public IncomeFragment() {
-        // Required empty public constructor
-
-    }
 
 
     @Override
