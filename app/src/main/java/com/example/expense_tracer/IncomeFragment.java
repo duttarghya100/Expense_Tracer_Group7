@@ -1,9 +1,9 @@
 package com.example.expense_tracer;
 
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,13 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.expense_tracer.Model.Data;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,34 +26,20 @@ public class IncomeFragment extends Fragment {
     private RecyclerView recyclerView;
     SQLiteDatabase sqLiteDatabase;
     List<Data> incomeList = new ArrayList<>();
+    Context context;
     private TextView incomeTotalSum;
 
-    public IncomeFragment(SQLiteDatabase sqLiteDatabase) {
+    public IncomeFragment(SQLiteDatabase sqLiteDatabase, Context context) {
+        this.context = context;
         this.sqLiteDatabase = sqLiteDatabase;
     }
-    //Update edit Text.
-    private EditText edtAmount;
-    private EditText edtType;
-    private EditText edtNote;
-
-    //button for Update and Delete
-    private Button btnUpdate;
-    private Button btnDelete;
-
-    //Data item value
-    private String type;
-    private String note;
-    private String amount;
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getTasks();
+        getDetails();
         View myview = inflater.inflate(R.layout.fragment_income, container, false);
         recyclerView=myview.findViewById(R.id.recycler_id_income);
-        RecyclerViewAdapter incomeRecyclerViewAdapter=new RecyclerViewAdapter(incomeList,getActivity(),sqLiteDatabase);
+        IncomeRecyclerViewAdapter incomeRecyclerViewAdapter=new IncomeRecyclerViewAdapter(incomeList,context,sqLiteDatabase);
         incomeRecyclerViewAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(incomeRecyclerViewAdapter);
         LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
@@ -66,8 +48,6 @@ public class IncomeFragment extends Fragment {
         layoutManager.setStackFromEnd(true);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-
-
         return myview;
 
 
@@ -100,7 +80,7 @@ public class IncomeFragment extends Fragment {
         // after populating, we need to call onclick listener on the view and inside that --- updateDataItem()
     }
 
-    public void getTasks() {
+    public void getDetails() {
         String incomeDetails = "SELECT * FROM INCOME;";
         Cursor cursor = sqLiteDatabase.rawQuery(incomeDetails, null);
         incomeList.clear();
@@ -126,34 +106,7 @@ public class IncomeFragment extends Fragment {
 
 
 
-    private void updateDataItem(){
-        AlertDialog.Builder mydialog= new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater= LayoutInflater.from(getActivity());
-        View myView=inflater.inflate(R.layout.update_data_item,null);
 
-        edtAmount=myView.findViewById(R.id.amount_edit);
-        edtType=myView.findViewById(R.id.type_edit);
-        edtNote=myView.findViewById(R.id.note_edit);
-
-        btnUpdate=myView.findViewById(R.id.btn_upd_Update);
-        btnDelete=myView.findViewById(R.id.btnuPD_Delete);
-        AlertDialog dialog=mydialog.create();
-
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-            dialog.show();
-    }
 
 }
 

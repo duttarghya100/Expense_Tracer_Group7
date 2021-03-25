@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.expense_tracer.Model.Data;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +40,10 @@ public class ExpenseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getTasks();
+        getDetails();
         View myview= inflater.inflate(R.layout.fragment_expense, container, false);
         recyclerView=myview.findViewById(R.id.recycler_id_expense);
-        RecyclerViewAdapter expenseRecyclerViewAdapter=new RecyclerViewAdapter(expenseList,getActivity(),sqLiteDatabase);
+        ExpenseRecyclerViewAdapter expenseRecyclerViewAdapter=new ExpenseRecyclerViewAdapter(expenseList,getActivity(),sqLiteDatabase);
         expenseRecyclerViewAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(expenseRecyclerViewAdapter);
         LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
@@ -63,7 +61,7 @@ public class ExpenseFragment extends Fragment {
 
 
         super.onStart();
-        // showing the Expense total Arghya
+        // showing the Expense total
         double expense=0;
         String expenseTotal="SELECT SUM(expense_amount) FROM Expense;";
 
@@ -81,7 +79,7 @@ public class ExpenseFragment extends Fragment {
         // after populating, we need to call onclick listener on the view and inside that --- updateDataItem()
     }
 
-    public void getTasks() {
+    public void getDetails() {
         String expenseDetails = "SELECT * FROM EXPENSE;";
         Cursor cursor = sqLiteDatabase.rawQuery(expenseDetails, null);
         expenseList.clear();

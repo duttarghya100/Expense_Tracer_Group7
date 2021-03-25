@@ -56,7 +56,7 @@ public SQLiteDatabase sqLiteDatabase;
         bottomNavigationView=findViewById(R.id.bottomNavBar);
         frameLayout=findViewById(R.id.main_frame);
         dashboardFragment=new DashboardFragment(sqLiteDatabase);
-        incomeFragment=new IncomeFragment(sqLiteDatabase);
+        incomeFragment=new IncomeFragment(sqLiteDatabase,this);
         expenseFragment=new ExpenseFragment(sqLiteDatabase);
         optionsFragment = new ReportOptionsFragment(sqLiteDatabase);
         setFragment(dashboardFragment);
@@ -97,7 +97,7 @@ public SQLiteDatabase sqLiteDatabase;
         try {
             sqLiteDatabase = openOrCreateDatabase("ExpenseTacer.db", MODE_PRIVATE, null);
         }catch (Exception ex){
-            Log.d("Expense Tracer", ex.getMessage());
+            Log.d("ExpenseTracer", ex.getMessage());
         }
 
     }
@@ -142,7 +142,7 @@ public SQLiteDatabase sqLiteDatabase;
                 fragment=new DashboardFragment(sqLiteDatabase);
                 break;
             case R.id.income:
-                fragment=new IncomeFragment(sqLiteDatabase);
+                fragment=new IncomeFragment(sqLiteDatabase,this);
                 break;
             case R.id.expense:
                 fragment=new ExpenseFragment(sqLiteDatabase);

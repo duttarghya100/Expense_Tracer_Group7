@@ -5,11 +5,13 @@
     android:elevation="5dp"
     app:cardElevation="5dp"
     android:layout_height="wrap_content">
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
