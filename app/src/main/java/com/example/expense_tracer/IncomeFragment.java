@@ -34,6 +34,8 @@ public class IncomeFragment extends Fragment {
         this.sqLiteDatabase = sqLiteDatabase;
     }
 
+    //test pushes
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getDetails();
