@@ -80,8 +80,8 @@ public class IncomeRecyclerViewAdapter extends RecyclerView.Adapter<IncomeRecycl
                 type=String.valueOf(data.getType());
                 note=String.valueOf(data.getNote());
                 date=String.valueOf(data.getDate());
-                updateDataItem(Id);
-                notifyDataSetChanged();
+                updateDataItem(data,Id, holder);
+
 
             }
         });
@@ -124,7 +124,7 @@ public class IncomeRecyclerViewAdapter extends RecyclerView.Adapter<IncomeRecycl
 
     }
 
-    private void updateDataItem(int id){
+    private void updateDataItem(Data data,int id, MyViewHolder holder){
         AlertDialog.Builder mydialog= new AlertDialog.Builder(context);
         LayoutInflater inflater= LayoutInflater.from(context);
         View myView=inflater.inflate(R.layout.update_data_item,null);
@@ -171,12 +171,20 @@ public class IncomeRecyclerViewAdapter extends RecyclerView.Adapter<IncomeRecycl
             @Override
             public void onClick(View v) {
                 amount=edtAmount.getText().toString().trim();
-                amountConv=Integer.parseInt(amount);
+                amountConv=Double.parseDouble(amount);
                 type=edtType.getText().toString().trim();
                 note=edtNote.getText().toString().trim();
                 date=dateText.getText().toString().trim();
                 updateIncomeDetails(id);
-                notifyDataSetChanged();
+                if (data.getId().equals(String.valueOf(Id))){
+                    data.setAmount(amountConv);
+                    data.setType(type);
+                    data.setNote(note);
+                    data.setDate(date);
+                    dataList.set(holder.getAdapterPosition(), data);
+                    notifyDataSetChanged();
+                }
+
                 dialog.dismiss();
 
             }
@@ -186,7 +194,10 @@ public class IncomeRecyclerViewAdapter extends RecyclerView.Adapter<IncomeRecycl
             @Override
             public void onClick(View v) {
                 deleteIncomeDetails(id);
-                notifyDataSetChanged();
+                if (data.getId().equals(String.valueOf(Id))){
+                    dataList.remove(holder.getAdapterPosition());
+                    notifyDataSetChanged();
+                }
                 dialog.dismiss();
             }
         });
