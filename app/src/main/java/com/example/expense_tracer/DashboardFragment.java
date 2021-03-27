@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,23 +33,29 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class DashboardFragment extends Fragment {
 
 
     private FloatingActionButton fab_main_btn;
-    private TextView expense_set_result;
+
     private FloatingActionButton fab_income_btn;
     private FloatingActionButton fab_expense_btn;
     private TextView income_set_result;
+    private TextView expense_set_result;
+    private TextView balance_set_result;
     private SQLiteDatabase sqLiteDatabase;
     // Recycler View
     private RecyclerView mRecyclerIncome;
     private RecyclerView mRecyclerExpense;
 
+    List<Data> IncomeList = new ArrayList<>();
+    List<Data> ExpenseList = new ArrayList<>();
 
     private TextView fab_income_txt;
     private TextView fab_expense_txt;
@@ -74,6 +81,25 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View myview=inflater.inflate(R.layout.fragment_dashboard, container, false);
+        mRecyclerIncome=myview.findViewById(R.id.recycler_income);
+        IncomeFragment incomeFragment=new IncomeFragment(sqLiteDatabase,getActivity());
+        incomeFragment.getDetails();
+        IncomeList=incomeFragment.incomeList;
+        DashboardRecyclerViewAdapter incomeListRecyclerViewAdapter=new DashboardRecyclerViewAdapter(IncomeList,getActivity(),sqLiteDatabase);
+        incomeListRecyclerViewAdapter.notifyDataSetChanged();
+        mRecyclerIncome.setAdapter(incomeListRecyclerViewAdapter);
+        mRecyclerExpense=myview.findViewById(R.id.recycler_expense);
+        ExpenseFragment expenseFragment=new ExpenseFragment(sqLiteDatabase);
+        expenseFragment.getDetails();
+        ExpenseList=expenseFragment.expenseList;
+        DashboardRecyclerViewAdapter expenseListRecyclerViewAdapter=new DashboardRecyclerViewAdapter(ExpenseList,getActivity(),sqLiteDatabase);
+        expenseListRecyclerViewAdapter.notifyDataSetChanged();
+        mRecyclerExpense.setAdapter(expenseListRecyclerViewAdapter);
+        LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        mRecyclerIncome.setHasFixedSize(true);
+        mRecyclerIncome.setLayoutManager(layoutManager);
         fab_main_btn=myview.findViewById(R.id.fb_main_plus_btn);
         fab_income_btn=myview.findViewById(R.id.income_ft_btn);
         fab_expense_btn=myview.findViewById(R.id.expense_ft_btn);
@@ -92,6 +118,7 @@ public class DashboardFragment extends Fragment {
 
         income_set_result = myview.findViewById(R.id.income_set_result);
        expense_set_result = myview.findViewById(R.id.expense_set_result);
+       balance_set_result=myview.findViewById(R.id.balance_set_result);
 
         fab_main_btn.setOnClickListener(new View.OnClickListener() {
 
@@ -152,6 +179,9 @@ public class DashboardFragment extends Fragment {
             expense=-1;
         cursorE.close();
         expense_set_result.setText("- "+String.valueOf(expense));
+
+        double balance=income-expense;
+        balance_set_result.setText(String.valueOf(balance));
 
         // Recycler view in Dashboard
 
@@ -274,8 +304,8 @@ public class DashboardFragment extends Fragment {
 
                 sqLiteDatabase.insert("INCOME", null, contentValues);
                 Toast.makeText(getActivity(),"Data Added",Toast.LENGTH_SHORT).show();
-
                 dialog.dismiss();
+
 
             }
         });
@@ -370,6 +400,7 @@ public class DashboardFragment extends Fragment {
 
                 sqLiteDatabase.insert("EXPENSE", null, contentValues);
                 Toast.makeText(getActivity(),"Data Added",Toast.LENGTH_SHORT).show();
+                ExpenseList.notify();
                 dialog.dismiss();
 
             }
@@ -384,4 +415,7 @@ public class DashboardFragment extends Fragment {
         });
         dialog.show();
     }
+
+
+
 }
