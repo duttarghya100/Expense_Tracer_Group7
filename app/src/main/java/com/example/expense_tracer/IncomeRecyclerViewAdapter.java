@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.expense_tracer.Model.Data;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
 
@@ -151,11 +155,13 @@ public class IncomeRecyclerViewAdapter extends RecyclerView.Adapter<IncomeRecycl
                 DatePickerDialog datePickerDialog = new DatePickerDialog(mydialog.getContext(),
                         new DatePickerDialog.OnDateSetListener() {
 
+                            @RequiresApi(api = Build.VERSION_CODES.O)
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-
-                                dateText.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                LocalDate pickedDate=LocalDate.of(year, monthOfYear+1, dayOfMonth);
+                                String pickedDateStr= DateTimeFormatter.ofPattern("dd-MM-yyyy").format(pickedDate);
+                                dateText.setText(pickedDateStr);
 
                             }
                         }, mYear, mMonth, mDay);

@@ -1,14 +1,12 @@
 package com.example.expense_tracer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -16,10 +14,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class ActivityReportTimeline extends AppCompatActivity {
@@ -68,7 +63,7 @@ public class ActivityReportTimeline extends AppCompatActivity {
 
                 expenseTotal += expenseAmount;
 
-                dataValues2.add(new Entry(Float.parseFloat(expenseDate), expenseTotal));
+                dataValues2.add(new Entry(Float.parseFloat(expenseDate), incomeTotal));
                 curs.moveToNext();
             }
         }

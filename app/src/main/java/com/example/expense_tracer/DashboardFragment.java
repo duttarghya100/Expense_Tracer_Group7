@@ -5,9 +5,11 @@ import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +35,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -251,11 +255,13 @@ public class DashboardFragment extends Fragment {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(myDialog.getContext(),
                         new DatePickerDialog.OnDateSetListener() {
 
+                            @RequiresApi(api = Build.VERSION_CODES.O)
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-
-                                dateText.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                LocalDate pickedDate=LocalDate.of(year, monthOfYear+1, dayOfMonth);
+                                String pickedDateStr= DateTimeFormatter.ofPattern("dd-MM-yyyy").format(pickedDate);
+                                dateText.setText(pickedDateStr);
 
                             }
                         }, mYear, mMonth, mDay);
@@ -348,11 +354,13 @@ public class DashboardFragment extends Fragment {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(myDialog.getContext(),
                         new DatePickerDialog.OnDateSetListener() {
 
+                            @RequiresApi(api = Build.VERSION_CODES.O)
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-
-                                dateText.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                LocalDate pickedDate=LocalDate.of(year, monthOfYear+1, dayOfMonth);
+                                String pickedDateStr= DateTimeFormatter.ofPattern("dd-MM-yyyy").format(pickedDate);
+                                dateText.setText(pickedDateStr);
 
                             }
                         }, mYear, mMonth, mDay);
@@ -400,7 +408,6 @@ public class DashboardFragment extends Fragment {
 
                 sqLiteDatabase.insert("EXPENSE", null, contentValues);
                 Toast.makeText(getActivity(),"Data Added",Toast.LENGTH_SHORT).show();
-                ExpenseList.notify();
                 dialog.dismiss();
 
             }
