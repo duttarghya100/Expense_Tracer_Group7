@@ -1,10 +1,11 @@
-package com.example.expense_tracer;
+    package com.example.expense_tracer;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -55,15 +56,17 @@ public class ActivityReportTimeline extends AppCompatActivity {
                 incomeValues[1] = curs.getString(4);
                 expenseValues[1] = curs.getString(curs.getColumnIndex("expense_date"));
                 incomeAmount = Float.parseFloat(incomeValues[0]);
-                incomeDate = incomeValues[1].substring(incomeValues[1].length() - 2);
+                incomeDate = incomeValues[1].substring(3, 5);
+                Toast.makeText(getApplicationContext(), incomeDate, Toast.LENGTH_SHORT).show();
                 expenseAmount = Float.parseFloat(expenseValues[0]);
-                expenseDate = expenseValues[1].substring(expenseValues[1].length() - 2);
+                expenseDate = expenseValues[1].substring(3, 4);
+                //Toast.makeText(getApplicationContext(), incomeDate, Toast.LENGTH_SHORT).show();
                 incomeTotal += incomeAmount;
                 dataValues1.add(new Entry(Float.parseFloat(incomeDate), incomeTotal));
 
-                expenseTotal += expenseAmount;
+                //expenseTotal += expenseAmount;
 
-                dataValues2.add(new Entry(Float.parseFloat(expenseDate), incomeTotal));
+                //dataValues2.add(new Entry(Float.parseFloat(expenseDate), incomeTotal));
                 curs.moveToNext();
             }
         }
