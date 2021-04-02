@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.expense_tracer.Model.Data;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -19,15 +20,12 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
 
-
     public class ActivityReportTimeline extends AppCompatActivity {
     LineChart lineChart;
     float incomeAmount = 0;
     float expenseAmount = 0;
     String incomeDate = "";
     String expenseDate = "";
-    float incomeTotal;
-    float expenseTotal;
     ArrayList<Entry> dataValues1 = new ArrayList<>();
     ArrayList<Entry> dataValues2 = new ArrayList<>();
 
@@ -35,7 +33,7 @@ import java.util.ArrayList;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_timeline);
-        lineChart = (LineChart) findViewById(R.id.lineChart);
+        lineChart =  findViewById(R.id.lineChart);
         SQLiteDatabase sqlDB = getApplicationContext().openOrCreateDatabase("ExpenseTacer.db",
                    Context.MODE_PRIVATE, null);
 
@@ -53,7 +51,6 @@ import java.util.ArrayList;
                     dataValues1.add(new Entry(Float.parseFloat(incomeDate), incomeAmount));
                 incomeCursor.moveToNext();
             }
-
         }
 
         String expenseDetails = "SELECT SUM(expense_amount) as total,substr(expense_date, 4, 2) as month FROM EXPENSE group by substr(expense_date, 4, 2);";
@@ -67,12 +64,11 @@ import java.util.ArrayList;
                 dataValues2.add(new Entry(Float.parseFloat(expenseDate), expenseAmount));
                 expenseCursor.moveToNext();
             }
-
         }
-//
-//        Sets the presets for the income AND expense graph lines to correct settings
 
         LineDataSet lineDataSet1 = new LineDataSet(dataValues1, "Income");
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setLabelCount(5);
         lineDataSet1.setColor(Color.BLUE);
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);
@@ -91,7 +87,4 @@ import java.util.ArrayList;
         lineChart.setData(data);
         lineChart.invalidate();
     }
-
-
-
 }

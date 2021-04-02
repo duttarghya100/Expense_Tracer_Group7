@@ -26,7 +26,6 @@ import java.util.ArrayList;
 
 public class ActivityReportCategory extends AppCompatActivity {
 
-
     String label = "";
     ArrayList<Float> valueList = new ArrayList<Float>();
     ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
