@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -80,8 +81,10 @@ public class ActivityReportCategory extends AppCompatActivity {
                         entries.add(barEntry);
                     }
 
+                    XAxis xAxis = barChart.getXAxis();
+                    xAxis.setDrawLabels(false);
                     BarDataSet barDataSet = new BarDataSet(entries, label);
-                    barDataSet.setColor(Color.BLUE);
+                    barDataSet.setColor(Color.rgb(134, 202, 239));
                     barDataSet.setValueTextSize(10f);
                     BarData data = new BarData(barDataSet);
                     barChart.setData(data);
@@ -111,8 +114,10 @@ public class ActivityReportCategory extends AppCompatActivity {
                         entries.add(barEntry);
                     }
 
+                    XAxis xAxis = barChart.getXAxis();
+                    xAxis.setDrawLabels(false);
                     BarDataSet barDataSet = new BarDataSet(entries, label);
-                    barDataSet.setColor(Color.RED);
+                    barDataSet.setColor(Color.rgb(247, 133, 148));
                     barDataSet.setValueTextSize(10f);
                     BarData data = new BarData(barDataSet);
                     barChart.setData(data);
