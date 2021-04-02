@@ -52,16 +52,6 @@ public class ExpenseFragment extends Fragment {
         layoutManager.setStackFromEnd(true);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-
-        return myview;
-    }
-
-    public void onStart() {
-
-
-
-        super.onStart();
-        // showing the Expense total
         double expense=0;
         String expenseTotal="SELECT SUM(expense_amount) FROM Expense;";
 
@@ -73,10 +63,11 @@ public class ExpenseFragment extends Fragment {
             expense=-1;
         cursorE.close();
         expenseSumResult.setText("- "+String.valueOf(expense));
+        return myview;
+    }
 
-
-        //
-        // after populating, we need to call onclick listener on the view and inside that --- updateDataItem()
+    public void onStart() {
+        super.onStart();
     }
 
     public void getDetails() {

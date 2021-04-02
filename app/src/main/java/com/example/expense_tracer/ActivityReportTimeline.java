@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.expense_tracer.Model.Data;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -34,40 +35,39 @@ import java.util.ArrayList;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_timeline);
-
         lineChart = (LineChart) findViewById(R.id.lineChart);
         SQLiteDatabase sqlDB = getApplicationContext().openOrCreateDatabase("ExpenseTacer.db",
                    Context.MODE_PRIVATE, null);
-        //Retrieving income/expense VALUE and income/expense DATE
-        String getIncome = "SELECT * FROM INCOME, EXPENSE;";
-        Cursor curs = sqlDB.rawQuery(getIncome, null);
+
         dataValues1.add(new Entry(0, 0));
         dataValues2.add(new Entry(0,0));
-        if (curs != null){
-            curs.moveToFirst();
-            while(!curs.isAfterLast()){
 
-                String[] incomeValues = new String[2];
-                String[] expenseValues = new String[2];
-                incomeValues[0] = curs.getString(2);
-                expenseValues[0] = curs.getString(curs.getColumnIndex("expense_amount"));
-                incomeValues[1] = curs.getString(4);
-                expenseValues[1] = curs.getString(curs.getColumnIndex("expense_date"));
-                incomeAmount = Float.parseFloat(incomeValues[0]);
-                incomeDate = incomeValues[1].substring(3, 5);
-                Toast.makeText(getApplicationContext(), incomeDate, Toast.LENGTH_SHORT).show();
-                expenseAmount = Float.parseFloat(expenseValues[0]);
-                expenseDate = expenseValues[1].substring(3, 5);
-                //Log.d("ExpenseTracer","Income Amount: "+incomeAmount+"Income Date: "+incomeDate);
-                //Toast.makeText(getApplicationContext(), incomeDate, Toast.LENGTH_SHORT).show();
-                incomeTotal+=incomeAmount;
+            String incomeDetails = "SELECT SUM(income_amount) as total,substr(income_date, 4, 2) as month FROM INCOME group by substr(income_date, 4, 2);";
+            Cursor incomeCursor = sqlDB.rawQuery(incomeDetails, null);
+        if (incomeCursor != null){
+            incomeCursor.moveToFirst();
+            while(!incomeCursor.isAfterLast()){
+
+                incomeAmount = Float.parseFloat(incomeCursor.getString(incomeCursor.getColumnIndex("total")));
+                incomeDate = incomeCursor.getString(incomeCursor.getColumnIndex("month"));
                     dataValues1.add(new Entry(Float.parseFloat(incomeDate), incomeAmount));
-
-//                expenseTotal += expenseAmount;
-//
-//                dataValues2.add(new Entry(Float.parseFloat(expenseDate), incomeTotal));
-                curs.moveToNext();
+                incomeCursor.moveToNext();
             }
+
+        }
+
+        String expenseDetails = "SELECT SUM(expense_amount) as total,substr(expense_date, 4, 2) as month FROM EXPENSE group by substr(expense_date, 4, 2);";
+        Cursor expenseCursor = sqlDB.rawQuery(expenseDetails, null);
+        if (expenseCursor != null){
+            expenseCursor.moveToFirst();
+            while(!expenseCursor.isAfterLast()){
+
+                expenseAmount = Float.parseFloat(expenseCursor.getString(expenseCursor.getColumnIndex("total")));
+                expenseDate = expenseCursor.getString(expenseCursor.getColumnIndex("month"));
+                dataValues2.add(new Entry(Float.parseFloat(expenseDate), expenseAmount));
+                expenseCursor.moveToNext();
+            }
+
         }
 //
 //        Sets the presets for the income AND expense graph lines to correct settings
@@ -91,6 +91,7 @@ import java.util.ArrayList;
         lineChart.setData(data);
         lineChart.invalidate();
     }
+
 
 
 }
