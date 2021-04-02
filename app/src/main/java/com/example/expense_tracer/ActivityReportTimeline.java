@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +19,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.util.ArrayList;
 
 
-public class ActivityReportTimeline extends AppCompatActivity {
-
+    public class ActivityReportTimeline extends AppCompatActivity {
     LineChart lineChart;
     float incomeAmount = 0;
     float expenseAmount = 0;
@@ -36,7 +36,6 @@ public class ActivityReportTimeline extends AppCompatActivity {
         setContentView(R.layout.activity_report_timeline);
 
         lineChart = (LineChart) findViewById(R.id.lineChart);
-        //Get Database
         SQLiteDatabase sqlDB = getApplicationContext().openOrCreateDatabase("ExpenseTacer.db",
                    Context.MODE_PRIVATE, null);
         //Retrieving income/expense VALUE and income/expense DATE
@@ -44,7 +43,6 @@ public class ActivityReportTimeline extends AppCompatActivity {
         Cursor curs = sqlDB.rawQuery(getIncome, null);
         dataValues1.add(new Entry(0, 0));
         dataValues2.add(new Entry(0,0));
-
         if (curs != null){
             curs.moveToFirst();
             while(!curs.isAfterLast()){
@@ -59,19 +57,21 @@ public class ActivityReportTimeline extends AppCompatActivity {
                 incomeDate = incomeValues[1].substring(3, 5);
                 Toast.makeText(getApplicationContext(), incomeDate, Toast.LENGTH_SHORT).show();
                 expenseAmount = Float.parseFloat(expenseValues[0]);
-                expenseDate = expenseValues[1].substring(3, 4);
-                //Toast.makeText(getApplicationContext(), incomeDate, Toast.LENGTH_SHORT).show();
-                incomeTotal += incomeAmount;
-                dataValues1.add(new Entry(Float.parseFloat(incomeDate), incomeTotal));
+                expenseDate = expenseValues[1].substring(3, 5);
+                Log.d("ExpenseTracer","Income Amount: "+incomeAmount+"Income Date: "+incomeDate);
+                Toast.makeText(getApplicationContext(), incomeDate, Toast.LENGTH_SHORT).show();
+                incomeTotal+=incomeAmount;
+                    dataValues1.add(new Entry(Float.parseFloat(incomeDate), incomeAmount));
 
-                //expenseTotal += expenseAmount;
-
-                //dataValues2.add(new Entry(Float.parseFloat(expenseDate), incomeTotal));
+//                expenseTotal += expenseAmount;
+//
+//                dataValues2.add(new Entry(Float.parseFloat(expenseDate), incomeTotal));
                 curs.moveToNext();
             }
         }
+//
+//        Sets the presets for the income AND expense graph lines to correct settings
 
-        //Sets the presets for the income AND expense graph lines to correct settings
         LineDataSet lineDataSet1 = new LineDataSet(dataValues1, "Income");
         lineDataSet1.setColor(Color.BLUE);
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -91,5 +91,6 @@ public class ActivityReportTimeline extends AppCompatActivity {
         lineChart.setData(data);
         lineChart.invalidate();
     }
+
 
 }

@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -72,12 +73,6 @@ public class DashboardFragment extends Fragment {
     public DashboardFragment(SQLiteDatabase sqLiteDatabase) {
         this.sqLiteDatabase = sqLiteDatabase;
     }
-
-
-
-
-
-
 
 
     @Override
@@ -210,7 +205,7 @@ public class DashboardFragment extends Fragment {
         fab_income_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                incomeDataInsert();
+                incomeDataInsert(IncomeList);
 
 
             }
@@ -228,7 +223,7 @@ public class DashboardFragment extends Fragment {
     }
 
 
-    public void incomeDataInsert(){
+    public void incomeDataInsert(List<Data> newlist){
         AlertDialog.Builder myDialog=new AlertDialog.Builder(getActivity());
         LayoutInflater inflater=LayoutInflater.from(getActivity());
         View myview=inflater.inflate(R.layout.custom_layout_for_insertdata,null);
@@ -277,7 +272,6 @@ public class DashboardFragment extends Fragment {
             public void onClick(View v) {
                 String type=editType.getText().toString().trim();
                 String stramount=editAmount.getText().toString().trim();
-               double amount=Double.parseDouble(stramount);
                 String note=editNote.getText().toString().trim();
                 String date=dateText.getText().toString().trim();
 
@@ -302,6 +296,7 @@ public class DashboardFragment extends Fragment {
                     return;
                 }
 
+                double amount=Double.parseDouble(stramount);
                 ContentValues contentValues = new ContentValues(); // bundling
                 contentValues.put("income_type", type);
                 contentValues.put("income_amount", amount);
@@ -376,7 +371,6 @@ public class DashboardFragment extends Fragment {
             public void onClick(View v) {
                 String type=editType.getText().toString().trim();
                 String stramount=editAmount.getText().toString().trim();
-                double amount=Double.parseDouble(stramount);
                 String note=editNote.getText().toString().trim();
                 String date=dateText.getText().toString().trim();
 
@@ -399,7 +393,7 @@ public class DashboardFragment extends Fragment {
                     dateText.setError("Required Field..");
                     return;
                 }
-
+                double amount=Double.parseDouble(stramount);
                 ContentValues contentValues = new ContentValues();
                 contentValues.put("expense_type", type);
                 contentValues.put("expense_amount", amount);
@@ -422,6 +416,7 @@ public class DashboardFragment extends Fragment {
         });
         dialog.show();
     }
+
 
 
 
