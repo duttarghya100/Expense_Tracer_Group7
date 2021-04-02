@@ -8,6 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -21,15 +26,15 @@ import java.util.ArrayList;
 
 public class ActivityReportCategory extends AppCompatActivity {
 
-    float incomeAmount = 0;
-    float expenseAmount = 0;
-    String incomeType;
-    String expenseType;
+
     String label = "";
-
-
     ArrayList<Float> valueList = new ArrayList<Float>();
     ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+    ArrayList<String> labelList = new ArrayList<String>();
+    RadioButton radBtnIncome;
+    RadioButton radBtnExpense;
+    String message = "Please select what data you want to display";
+    Button showBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,28 +44,82 @@ public class ActivityReportCategory extends AppCompatActivity {
 
         SQLiteDatabase sqlDB = getApplicationContext().openOrCreateDatabase("ExpenseTacer.db",
                 Context.MODE_PRIVATE, null);
-        String query = "SELECT * FROM INCOME;";
-        Cursor curs = sqlDB.rawQuery(query, null);
 
+        radBtnIncome = findViewById(R.id.radBtnShowIncome);
+        radBtnExpense = findViewById(R.id.radBtnShowExpense);
+        showBtn = findViewById(R.id.btnShowGraph);
 
-        curs.moveToFirst();
-        //if (curs != null){
-        //    while(!curs.isAfterLast()){
-                valueList.add(Float.parseFloat(curs.getString(2)));
-                label = curs.getString(1);
-        //    }
-        //}
+        showBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
 
-        for (int i = 0; i < valueList.size(); i++){
-            BarEntry barEntry = new BarEntry(i, valueList.get(i).floatValue());
-            entries.add(barEntry);
-        }
+                if (radBtnIncome.isChecked() == false && radBtnExpense.isChecked() == false){
 
-        BarDataSet barDataSet = new BarDataSet(entries, label);
-        barDataSet.setValueTextSize(10f);
-        BarData data = new BarData(barDataSet);
-        barChart.setData(data);
-        barChart.invalidate();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
+                } else if (radBtnIncome.isChecked() == true){
+
+                    valueList.clear();
+                    entries.clear();
+                    barChart.clear();
+                    barChart.invalidate();
+
+                    String query = "SELECT * FROM INCOME;";
+                    Cursor curs = sqlDB.rawQuery(query, null);
+
+                    curs.moveToFirst();
+                    while (true){
+                        valueList.add(Float.parseFloat(curs.getString(2)));
+                        labelList.add(curs.getString(1));
+                        curs.moveToNext();
+                        if (curs.isAfterLast()){
+                            break;
+                        }
+                    }
+
+                    for (int i = 0; i < valueList.size(); i++){
+                        BarEntry barEntry = new BarEntry(i, valueList.get(i).floatValue());
+                        entries.add(barEntry);
+                    }
+
+                    BarDataSet barDataSet = new BarDataSet(entries, label);
+                    barDataSet.setColor(Color.BLUE);
+                    barDataSet.setValueTextSize(10f);
+                    BarData data = new BarData(barDataSet);
+                    barChart.setData(data);
+                    barChart.invalidate();
+
+                } else if (radBtnExpense.isChecked() == true){
+
+                    valueList.clear();
+                    entries.clear();
+                    barChart.clear();
+                    barChart.invalidate();
+
+                    String queryy = "SELECT * FROM EXPENSE;";
+                    Cursor curs = sqlDB.rawQuery(queryy, null);
+                    curs.moveToFirst();
+                    while (true){
+                        valueList.add(Float.parseFloat(curs.getString(2)));
+                        labelList.add(curs.getString(1));
+                        curs.moveToNext();
+                        if (curs.isAfterLast()){
+                            break;
+                        }
+                    }
+
+                    for (int i = 0; i < valueList.size(); i++){
+                        BarEntry barEntry = new BarEntry(i, valueList.get(i).floatValue());
+                        entries.add(barEntry);
+                    }
+
+                    BarDataSet barDataSet = new BarDataSet(entries, label);
+                    barDataSet.setColor(Color.RED);
+                    barDataSet.setValueTextSize(10f);
+                    BarData data = new BarData(barDataSet);
+                    barChart.setData(data);
+                    barChart.invalidate();
+                }
+            }
+        });
     }
 }
