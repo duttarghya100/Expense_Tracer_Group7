@@ -58,8 +58,8 @@ import java.util.ArrayList;
                 Toast.makeText(getApplicationContext(), incomeDate, Toast.LENGTH_SHORT).show();
                 expenseAmount = Float.parseFloat(expenseValues[0]);
                 expenseDate = expenseValues[1].substring(3, 5);
-                Log.d("ExpenseTracer","Income Amount: "+incomeAmount+"Income Date: "+incomeDate);
-                Toast.makeText(getApplicationContext(), incomeDate, Toast.LENGTH_SHORT).show();
+                //Log.d("ExpenseTracer","Income Amount: "+incomeAmount+"Income Date: "+incomeDate);
+                //Toast.makeText(getApplicationContext(), incomeDate, Toast.LENGTH_SHORT).show();
                 incomeTotal+=incomeAmount;
                     dataValues1.add(new Entry(Float.parseFloat(incomeDate), incomeAmount));
 
