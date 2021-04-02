@@ -63,13 +63,13 @@ public class ActivityReportCategory extends AppCompatActivity {
                     barChart.clear();
                     barChart.invalidate();
 
-                    String query = "SELECT * FROM INCOME;";
+                    String query = "SELECT SUM(income_amount) as total,income_type FROM INCOME group by income_type;";
                     Cursor curs = sqlDB.rawQuery(query, null);
 
                     curs.moveToFirst();
                     while (true){
-                        valueList.add(Float.parseFloat(curs.getString(2)));
-                        labelList.add(curs.getString(1));
+                        valueList.add(Float.parseFloat(curs.getString(curs.getColumnIndex("total"))));
+                        labelList.add(curs.getString(curs.getColumnIndex("income_type")));
                         curs.moveToNext();
                         if (curs.isAfterLast()){
                             break;
@@ -95,12 +95,12 @@ public class ActivityReportCategory extends AppCompatActivity {
                     barChart.clear();
                     barChart.invalidate();
 
-                    String queryy = "SELECT * FROM EXPENSE;";
+                    String queryy = "SELECT SUM(expense_amount) as total,expense_type FROM EXPENSE group by expense_type;";
                     Cursor curs = sqlDB.rawQuery(queryy, null);
                     curs.moveToFirst();
                     while (true){
-                        valueList.add(Float.parseFloat(curs.getString(2)));
-                        labelList.add(curs.getString(1));
+                        valueList.add(Float.parseFloat(curs.getString(curs.getColumnIndex("total"))));
+                        labelList.add(curs.getString(curs.getColumnIndex("expense_type")));
                         curs.moveToNext();
                         if (curs.isAfterLast()){
                             break;
