@@ -34,7 +34,7 @@
         android:layout_marginBottom="40dp"
         android:padding="10dp"
         android:paddingTop="10dp"
-        android:text="Timeline"></Button>
+        android:text="Income and Expense Trend"></Button>
 
     <Button
         android:id="@+id/categoriesReportBtn"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="25dp"
         android:padding="10dp"
-        android:text="Categories"
+        android:text="Income and Expense by Type"
         app:iconPadding="10dp"></Button>
 
 </LinearLayout>

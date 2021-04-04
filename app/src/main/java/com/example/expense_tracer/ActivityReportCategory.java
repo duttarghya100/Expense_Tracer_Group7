@@ -28,9 +28,11 @@ import java.util.ArrayList;
 public class ActivityReportCategory extends AppCompatActivity {
 
     String label = "";
-    ArrayList<Float> valueList = new ArrayList<Float>();
-    ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
-    ArrayList<String> labelList = new ArrayList<String>();
+    ArrayList<Float> valueList = new ArrayList<>();
+    ArrayList<BarEntry> entries = new ArrayList<>();
+    //int count = 0;
+    //String[] labelList = new String[50];
+    ArrayList<String> labelList = new ArrayList<>();
     RadioButton radBtnIncome;
     RadioButton radBtnExpense;
     String message = "Please select what data you want to display";
@@ -69,6 +71,7 @@ public class ActivityReportCategory extends AppCompatActivity {
                     curs.moveToFirst();
                     while (true){
                         valueList.add(Float.parseFloat(curs.getString(curs.getColumnIndex("total"))));
+                        //label = (curs.getString(curs.getColumnIndex("income_type")));
                         labelList.add(curs.getString(curs.getColumnIndex("income_type")));
                         curs.moveToNext();
                         if (curs.isAfterLast()){
@@ -83,7 +86,8 @@ public class ActivityReportCategory extends AppCompatActivity {
 
                     XAxis xAxis = barChart.getXAxis();
                     xAxis.setDrawLabels(false);
-                    BarDataSet barDataSet = new BarDataSet(entries, label);
+                    //BarDataSet barDataSet = new BarDataSet(entries, label);
+                    BarDataSet barDataSet = new BarDataSet(entries, labelList.get(0));
                     barDataSet.setColor(Color.rgb(134, 202, 239));
                     barDataSet.setValueTextSize(10f);
                     BarData data = new BarData(barDataSet);
@@ -102,6 +106,7 @@ public class ActivityReportCategory extends AppCompatActivity {
                     curs.moveToFirst();
                     while (true){
                         valueList.add(Float.parseFloat(curs.getString(curs.getColumnIndex("total"))));
+                        //label = (curs.getString(curs.getColumnIndex("expense_type")));
                         labelList.add(curs.getString(curs.getColumnIndex("expense_type")));
                         curs.moveToNext();
                         if (curs.isAfterLast()){
@@ -116,7 +121,11 @@ public class ActivityReportCategory extends AppCompatActivity {
 
                     XAxis xAxis = barChart.getXAxis();
                     xAxis.setDrawLabels(false);
-                    BarDataSet barDataSet = new BarDataSet(entries, label);
+
+                    //Toast.makeText(getApplicationContext(), labelList.get(1), Toast.LENGTH_SHORT).show();
+
+                    //BarDataSet barDataSet = new BarDataSet(entries, label);
+                    BarDataSet barDataSet = new BarDataSet(entries, labelList.get(0));
                     barDataSet.setColor(Color.rgb(247, 133, 148));
                     barDataSet.setValueTextSize(10f);
                     BarData data = new BarData(barDataSet);

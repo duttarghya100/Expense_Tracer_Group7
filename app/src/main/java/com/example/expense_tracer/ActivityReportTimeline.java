@@ -68,7 +68,7 @@ import java.util.ArrayList;
 
         LineDataSet lineDataSet1 = new LineDataSet(dataValues1, "Income");
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setLabelCount(5);
+        xAxis.setLabelCount(dataValues1.size());
         lineDataSet1.setColor(Color.BLUE);
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);

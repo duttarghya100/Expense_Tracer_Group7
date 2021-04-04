@@ -3,6 +3,7 @@ package com.example.expense_tracer;
 import android.content.Intent;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -76,7 +77,9 @@ public class ReportOptionsFragment extends Fragment {
         View view= inflater.inflate(R.layout.fragment_report_options, container, false);
 
         timeLineReportBtn = view.findViewById(R.id.timelineReportBtn);
+        timeLineReportBtn.setBackgroundColor(Color.rgb(255, 179, 102));
         categoryReportBtn = view.findViewById(R.id.categoriesReportBtn);
+        categoryReportBtn.setBackgroundColor(Color.rgb(255, 179, 102));
 
         categoryReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
