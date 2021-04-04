@@ -16,6 +16,7 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
@@ -68,7 +69,9 @@ import java.util.ArrayList;
 
         LineDataSet lineDataSet1 = new LineDataSet(dataValues1, "Income");
         XAxis xAxis = lineChart.getXAxis();
+        xAxis.setAxisMaximum(dataValues1.size());
         xAxis.setLabelCount(dataValues1.size());
+        lineChart.getAxisRight().setEnabled(false);
         lineDataSet1.setColor(Color.BLUE);
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);
