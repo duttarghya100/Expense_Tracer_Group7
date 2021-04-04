@@ -205,7 +205,7 @@ public class DashboardFragment extends Fragment {
         fab_income_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                incomeDataInsert(IncomeList);
+                incomeDataInsert();
 
 
             }
@@ -223,7 +223,7 @@ public class DashboardFragment extends Fragment {
     }
 
 
-    public void incomeDataInsert(List<Data> newlist){
+    public void incomeDataInsert(){
         AlertDialog.Builder myDialog=new AlertDialog.Builder(getActivity());
         LayoutInflater inflater=LayoutInflater.from(getActivity());
         View myview=inflater.inflate(R.layout.custom_layout_for_insertdata,null);

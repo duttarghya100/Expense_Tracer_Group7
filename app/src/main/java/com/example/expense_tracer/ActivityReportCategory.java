@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,13 +16,18 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.ChartData;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.slider.LabelFormatter;
 
 import java.util.ArrayList;
 
@@ -30,8 +36,6 @@ public class ActivityReportCategory extends AppCompatActivity {
     String label = "";
     ArrayList<Float> valueList = new ArrayList<>();
     ArrayList<BarEntry> entries = new ArrayList<>();
-    //int count = 0;
-    //String[] labelList = new String[50];
     ArrayList<String> labelList = new ArrayList<>();
     RadioButton radBtnIncome;
     RadioButton radBtnExpense;
@@ -71,7 +75,6 @@ public class ActivityReportCategory extends AppCompatActivity {
                     curs.moveToFirst();
                     while (true){
                         valueList.add(Float.parseFloat(curs.getString(curs.getColumnIndex("total"))));
-                        //label = (curs.getString(curs.getColumnIndex("income_type")));
                         labelList.add(curs.getString(curs.getColumnIndex("income_type")));
                         curs.moveToNext();
                         if (curs.isAfterLast()){
@@ -85,11 +88,23 @@ public class ActivityReportCategory extends AppCompatActivity {
                     }
 
                     XAxis xAxis = barChart.getXAxis();
-                    xAxis.setDrawLabels(false);
-                    //BarDataSet barDataSet = new BarDataSet(entries, label);
-                    BarDataSet barDataSet = new BarDataSet(entries, labelList.get(0));
+                    xAxis.setGranularity(1f);
+                    xAxis.setDrawGridLines(false);
+                    xAxis.setLabelRotationAngle(-45);
+                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                    xAxis.setAxisMaximum(entries.size());
+                    xAxis.setValueFormatter(new IndexAxisValueFormatter(labelList));
+                    BarDataSet barDataSet = new BarDataSet(entries, "Income");
                     barDataSet.setColor(Color.rgb(134, 202, 239));
                     barDataSet.setValueTextSize(10f);
+
+                    YAxis leftAxis = barChart.getAxisLeft();
+                    leftAxis.removeAllLimitLines();
+                    leftAxis.setTypeface(Typeface.DEFAULT);
+                    leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+                    leftAxis.setTextColor(Color.BLACK);
+                    leftAxis.setDrawGridLines(false);
+
                     BarData data = new BarData(barDataSet);
                     barChart.setData(data);
                     barChart.invalidate();
@@ -106,7 +121,6 @@ public class ActivityReportCategory extends AppCompatActivity {
                     curs.moveToFirst();
                     while (true){
                         valueList.add(Float.parseFloat(curs.getString(curs.getColumnIndex("total"))));
-                        //label = (curs.getString(curs.getColumnIndex("expense_type")));
                         labelList.add(curs.getString(curs.getColumnIndex("expense_type")));
                         curs.moveToNext();
                         if (curs.isAfterLast()){
@@ -120,14 +134,24 @@ public class ActivityReportCategory extends AppCompatActivity {
                     }
 
                     XAxis xAxis = barChart.getXAxis();
-                    xAxis.setDrawLabels(false);
-
-                    //Toast.makeText(getApplicationContext(), labelList.get(1), Toast.LENGTH_SHORT).show();
-
-                    //BarDataSet barDataSet = new BarDataSet(entries, label);
-                    BarDataSet barDataSet = new BarDataSet(entries, labelList.get(0));
+                    xAxis.setGranularity(1f);
+                    xAxis.setDrawGridLines(false);
+                    xAxis.setLabelRotationAngle(-45);
+                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                    xAxis.setAxisMaximum(entries.size());
+                    xAxis.setValueFormatter(new IndexAxisValueFormatter(labelList));
+                    BarDataSet barDataSet = new BarDataSet(entries, "Expense");
                     barDataSet.setColor(Color.rgb(247, 133, 148));
                     barDataSet.setValueTextSize(10f);
+
+                    YAxis leftAxis = barChart.getAxisLeft();
+                    leftAxis.removeAllLimitLines();
+                    leftAxis.setTypeface(Typeface.DEFAULT);
+                    leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+                    leftAxis.setTextColor(Color.BLACK);
+                    leftAxis.setDrawGridLines(false);
+                    barChart.getAxisRight().setEnabled(false);
+
                     BarData data = new BarData(barDataSet);
                     barChart.setData(data);
                     barChart.invalidate();
