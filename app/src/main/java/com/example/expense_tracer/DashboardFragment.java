@@ -126,12 +126,12 @@ public class DashboardFragment extends Fragment {
                addData();
                 if (isOpen){
                     fab_income_btn.startAnimation(FadeClose);
-                    fab_expense_btn.startAnimation(FadeOpen);
+                    fab_expense_btn.startAnimation(FadeClose);
                     fab_income_btn.setClickable(false);
                     fab_expense_btn.setClickable(false);
 
                     fab_income_txt.startAnimation(FadeClose);
-                    fab_expense_txt.startAnimation(FadeOpen);
+                    fab_expense_txt.startAnimation(FadeClose);
                     fab_income_txt.setClickable(false);
                     fab_expense_txt.setClickable(false);
                     isOpen=false;
@@ -150,7 +150,6 @@ public class DashboardFragment extends Fragment {
 
             }
         });
-        // showing the Income total Arghya
 
         double income=0;
 
@@ -165,8 +164,6 @@ public class DashboardFragment extends Fragment {
         cursorI.close();
         income_set_result.setText(String.valueOf(income));
 
-
-        // showing the Expense total
         double expense=0;
         String expenseTotal="SELECT SUM(expense_amount) FROM Expense;";
 
@@ -382,8 +379,6 @@ public class DashboardFragment extends Fragment {
                     editType.setError("Required Field..");
                     return;
                 }
-
-               // double ourAmountInt=Double.parseDouble(stramount);
                 if (TextUtils.isEmpty(note)){
                     editNote.setError("Required Field..");
                     return;

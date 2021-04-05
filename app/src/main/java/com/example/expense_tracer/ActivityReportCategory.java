@@ -57,18 +57,19 @@ public class ActivityReportCategory extends AppCompatActivity {
 
         showBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-
+                valueList.clear();
+                entries.clear();
+                labelList.clear();
+                barChart.clear();
+                barChart.invalidate();
+                XAxis xAxis = barChart.getXAxis();
+                xAxis.setValueFormatter(null);
+                YAxis leftAxis = barChart.getAxisLeft();
                 if (radBtnIncome.isChecked() == false && radBtnExpense.isChecked() == false){
 
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                 } else if (radBtnIncome.isChecked() == true){
-
-                    valueList.clear();
-                    entries.clear();
-                    barChart.clear();
-                    barChart.invalidate();
-
                     String query = "SELECT SUM(income_amount) as total,income_type FROM INCOME group by income_type;";
                     Cursor curs = sqlDB.rawQuery(query, null);
 
@@ -87,7 +88,6 @@ public class ActivityReportCategory extends AppCompatActivity {
                         entries.add(barEntry);
                     }
 
-                    XAxis xAxis = barChart.getXAxis();
                     xAxis.setGranularity(1f);
                     xAxis.setDrawGridLines(false);
                     xAxis.setLabelRotationAngle(-45);
@@ -98,23 +98,18 @@ public class ActivityReportCategory extends AppCompatActivity {
                     barDataSet.setColor(Color.rgb(134, 202, 239));
                     barDataSet.setValueTextSize(10f);
 
-                    YAxis leftAxis = barChart.getAxisLeft();
                     leftAxis.removeAllLimitLines();
                     leftAxis.setTypeface(Typeface.DEFAULT);
                     leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
                     leftAxis.setTextColor(Color.BLACK);
                     leftAxis.setDrawGridLines(false);
+                    barChart.getAxisRight().setEnabled(false);
 
                     BarData data = new BarData(barDataSet);
                     barChart.setData(data);
                     barChart.invalidate();
 
                 } else if (radBtnExpense.isChecked() == true){
-
-                    valueList.clear();
-                    entries.clear();
-                    barChart.clear();
-                    barChart.invalidate();
 
                     String queryy = "SELECT SUM(expense_amount) as total,expense_type FROM EXPENSE group by expense_type;";
                     Cursor curs = sqlDB.rawQuery(queryy, null);
@@ -133,7 +128,6 @@ public class ActivityReportCategory extends AppCompatActivity {
                         entries.add(barEntry);
                     }
 
-                    XAxis xAxis = barChart.getXAxis();
                     xAxis.setGranularity(1f);
                     xAxis.setDrawGridLines(false);
                     xAxis.setLabelRotationAngle(-45);
@@ -144,7 +138,7 @@ public class ActivityReportCategory extends AppCompatActivity {
                     barDataSet.setColor(Color.rgb(247, 133, 148));
                     barDataSet.setValueTextSize(10f);
 
-                    YAxis leftAxis = barChart.getAxisLeft();
+
                     leftAxis.removeAllLimitLines();
                     leftAxis.setTypeface(Typeface.DEFAULT);
                     leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
